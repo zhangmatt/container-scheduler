@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package mini_borg.v1;
+
+service SchedulerService {
+  rpc SubmitTask(SubmitTaskRequest) returns (SubmitTaskResponse);
+  rpc ListNodes(ListNodesRequest) returns (ListNodesResponse);
+  rpc ListTasks(ListTasksRequest) returns (ListTasksResponse);
+  rpc KillTask(KillTaskRequest) returns (KillTaskResponse);
+  rpc NodeHeartbeat(NodeHeartbeatRequest) returns (NodeHeartbeatResponse);
+  rpc ReportTaskStatus(ReportTaskStatusRequest) returns (ReportTaskStatusResponse);
+}
+
+message ResourceQuantity {
+  int64 cpu_millis = 1;
+  int64 memory_mb = 2;
+}
+
+message TaskSpec {
+  string name = 1;
+  string tenant = 2;
+  repeated string command = 3;
+  ResourceQuantity resources = 4;
+  int32 priority = 5;
+  int32 replicas = 6;
+}
+
+enum TaskState {
+  TASK_STATE_UNSPECIFIED = 0;
+  TASK_STATE_PENDING = 1;
+  TASK_STATE_RUNNING = 2;
+  TASK_STATE_SUCCEEDED = 3;
+  TASK_STATE_FAILED = 4;
+  TASK_STATE_KILLED = 5;
+}
+
+message TaskInfo {
+  string id = 1;
+  string name = 2;
+  string tenant = 3;
+  repeated string command = 4;
+  ResourceQuantity resources = 5;
+  int32 priority = 6;
+  TaskState state = 7;
+  string node_id = 8;
+  bool desired = 9;
+  int32 preemptions = 10;
+}
+
+enum NodeHealth {
+  NODE_HEALTH_UNSPECIFIED = 0;
+  NODE_HEALTH_HEALTHY = 1;
+  NODE_HEALTH_UNHEALTHY = 2;
+}
+
+message NodeInfo {
+  string id = 1;
+  ResourceQuantity capacity = 2;
+  NodeHealth health = 3;
+  map<string, string> labels = 4;
+}
+
+message SubmitTaskRequest {
+  TaskSpec spec = 1;
+}
+
+message SubmitTaskResponse {
+  repeated string task_ids = 1;
+  repeated string schedule_statuses = 2;
+}
+
+message ListNodesRequest {}
+
+message ListNodesResponse {
+  repeated NodeInfo nodes = 1;
+}
+
+message ListTasksRequest {}
+
+message ListTasksResponse {
+  repeated TaskInfo tasks = 1;
+}
+
+message KillTaskRequest {
+  string task_id = 1;
+}
+
+message KillTaskResponse {
+  bool killed = 1;
+}
+
+message NodeHeartbeatRequest {
+  string node_id = 1;
+  ResourceQuantity capacity = 2;
+}
+
+message NodeHeartbeatResponse {
+  bool accepted = 1;
+}
+
+message ReportTaskStatusRequest {
+  string task_id = 1;
+  TaskState state = 2;
+}
+
+message ReportTaskStatusResponse {
+  bool accepted = 1;
+}
