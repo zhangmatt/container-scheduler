@@ -11,7 +11,7 @@ I built this to make the distributed-systems work explicit: scheduling,
 reconciliation, resource accounting, failure recovery, and control-plane
 interfaces in C++, with deterministic tests instead of a demo-only prototype.
 
-## What It Shows
+## Highlights
 
 - **C++20 systems code:** scheduler, state store, reconciler, node agent, runtime
   interface, CLI/server entrypoints.
