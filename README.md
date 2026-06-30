@@ -1,5 +1,7 @@
 # Mini Borg
 
+[![CI](https://github.com/zhangmatt/container-scheduler/actions/workflows/ci.yml/badge.svg)](https://github.com/zhangmatt/container-scheduler/actions/workflows/ci.yml)
+
 A small C++20 cluster scheduler inspired by Google Borg and Kubernetes control
 loops. It places tasks across worker nodes, tracks cluster state, reschedules
 failed work, enforces tenant quotas, and preempts lower-priority tasks when
